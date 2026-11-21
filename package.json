@@ -1,7 +1,6 @@
 {
   "name": "dsh-fish-tools",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -12,8 +11,16 @@
   },
   "description": "大肥鱼接入总成：两个只读工具、三家插件开关投影、三处第三方补丁与设置界面",
   "keywords": [
-    "dsh-plugin"
+    "dsh-plugin",
+    "deepseek-harness",
+    "dsh",
+    "bundle"
   ],
+  "homepage": "https://github.com/Swcmb/dsh-fish-tools#readme",
+  "bugs": {
+    "url": "https://github.com/Swcmb/dsh-fish-tools/issues"
+  },
+  "author": "Swcmb",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Swcmb/dsh-fish-tools.git"
