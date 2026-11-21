@@ -5,6 +5,19 @@
 
 装完之后只有一处入口：**设置 → 大肥鱼对接**。
 
+## 安装
+
+在 DSH Web 的**插件管理**里，用本目录打出的 `.tgz` 安装（external bundle），
+或者把本目录 `link:` 进 profile 的 `dependencies` 并把 `dsh-fish-tools` 加进
+`dsh.profile.bundles`。包清单是 `package.json`，挂载入口是 `cordis.patch.yml`，
+浏览器半边是 `exports['./client']`。
+
+前置条件：三个被补丁的包（`@ssamurias/dsh-fish`、`@furongjun1999/dsh-memory`、
+`@kanadego/dsh-heartbeat`）必须已装在同一个 profile 里；缺哪个，对应补丁会显示「文件不存在」，
+不影响其它功能。
+
+补丁改的是第三方包里的代码，**应用/还原之后必须重启 DSH**。
+
 ---
 
 ## 一、它管哪些插件
