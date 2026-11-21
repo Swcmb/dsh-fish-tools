@@ -99,6 +99,16 @@ export async function run() {
     const notGet = await callRoute(stateRoute, { method: 'POST' })
     eq(notGet.status, 405, '/state 只接受 GET')
 
+    section('路由：同源栅栏')
+    const crossOrigin = await callRoute(stateRoute, { headers: { host: '127.0.0.1:60000', origin: 'http://evil.local' } })
+    eq(crossOrigin.status, 403, '跨源 Origin 被拒')
+    const sameOrigin = await callRoute(stateRoute, { headers: { host: '127.0.0.1:60000', origin: 'http://127.0.0.1:60000' } })
+    eq(sameOrigin.status, 200, '同源（含端口）放行')
+    const otherPort = await callRoute(stateRoute, { headers: { host: '127.0.0.1:60000', origin: 'http://127.0.0.1:60001' } })
+    eq(otherPort.status, 403, '本机另一个端口被拒（端口也要比）')
+    const nonLoopback = await callRoute(stateRoute, { headers: { host: '192.168.1.9:60000' } })
+    eq(nonLoopback.status, 403, '非回环 Host 被拒')
+
     const patchRoute = routes.find((r) => r.path === '/dsh-fish-tools/patch')
     const unknown = await callRoute(patchRoute, { method: 'POST', body: { id: 'nope', action: 'apply' } })
     eq(unknown.status, 404, '未知补丁 id → 404')

@@ -79,9 +79,10 @@ export function fakeCtx() {
 }
 
 /** 调一条路由的 handler，拿回 {status, body}。 */
-export async function callRoute(route, { method = 'GET', body } = {}) {
+export async function callRoute(route, { method = 'GET', body, headers } = {}) {
   const req = {
     method,
+    headers: headers ?? {},
     async *[Symbol.asyncIterator]() {
       if (body !== undefined) yield Buffer.from(JSON.stringify(body), 'utf8')
     },

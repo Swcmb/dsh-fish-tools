@@ -60,8 +60,17 @@
 
 ## 三、设置页四张卡
 
-1. **能力** —— 表情包 / B 站报告 / 心跳采集 / 灵枢隔离；「主动开口归谁」二选一
-   （大肥鱼 / 都别开口）。改动立刻投影到上面那几家插件的配置里。
+1. **能力** —— 四个开关，每个都落到真实配置上：
+   - 表情包 → 放行/摘掉 `learn_meme / meme_list / meme_update / send_meme`
+   - B 站报告 → 放行/摘掉 `bili_report`，并增删 `tools.sources` 里的 `bili-scroll`
+   - 心跳素材可读 → 只放行/摘掉 `heartbeat_seeds`。心跳**恒为只采集不开口**
+     （发送额度写死 0，因为它没有「停止采集」的开关，只有闸门），所以这个开关
+     管的是「她能不能读那份明文镜像」
+   - 灵枢隔离 → 直接应用/还原 `lingshu-isolation` 补丁，并提示重启
+   - 主动开口归谁 → 大肥鱼（用她原来的 `wakesPerDay` / `proactive.enabled`）或
+     都别开口（`wakesPerDay=0` + `proactive.enabled=false`）
+
+   改动立刻投影到上面那几家插件的配置里。
 2. **白名单与来源** —— 直接编辑 `tools.allow` 与 `tools.sources`（一行一个，来源格式
    `name,kind,tool`），保存后写回 `~/.dsh-fish/config.json`。
 3. **补丁** —— 五条补丁各自的状态（已应用 / 未应用 / 版本不匹配 / 文件不存在），
@@ -98,7 +107,11 @@
 | `/dsh-fish-tools/save` | POST | `{abilities}` 或 `{allow, sources}`，写回并投影 |
 | `/dsh-fish-tools/patch` | POST | `{id, action:'apply'\|'revert'}` |
 
-配置落在 `~/.dsh/dsh-fish-tools/config.json`（记录补丁 hash 与投影前的原值），
+三条路由都过**同源栅栏**：没有 `Host` 头（宿主内部/本机脚本）放行；有 `Host` 就必须是回环，
+且带了 `Origin`/`Referer` 时 authority（含端口）要与 `Host` 一致。跨源的浏览器请求一律 403 ——
+这几条路由能改配置、能改别人的代码，不能让人随便调。
+
+配置落在 `<DSH_HOME>/dsh-fish-tools/config.json`（记录补丁 hash 与投影前的原值），
 不重复存别人家的配置。
 
 ---

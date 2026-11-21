@@ -4,6 +4,7 @@
 // 六组：
 //   清单      —— package.json / cordis.patch.yml（漏了 main/exports 就靠这组拦）
 //   schema    —— 两个工具的 JSON Schema（ajv 会拒不合法的）
+//   投影      —— 开关怎么换算成白名单/来源/醒来次数（纯函数）
 //   补丁      —— 五条补丁的状态、幂等、还原、往返（真实包副本）
 //   素材收口  —— runs fish/turns.js 里那段真实补丁代码
 //   工具      —— bili_report / heartbeat_seeds / /state 路由
@@ -16,6 +17,7 @@ import { fail, section, summary } from './helpers.mjs'
 const SUITES = [
   ['清单', './manifest.test.mjs'],
   ['schema', './schema.test.mjs'],
+  ['投影', './projection.test.mjs'],
   ['补丁', './patches.test.mjs'],
   ['素材收口', './ingest.test.mjs'],
   ['工具', './tools.test.mjs'],
