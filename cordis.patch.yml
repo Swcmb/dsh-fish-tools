@@ -1,0 +1,6 @@
+# dsh-fish-tools bundle layer：把插件挂进 profile。
+# 主机端（工具、配置投影、补丁接口）在 lib/index.js，设置页在 lib/client.js。
+# insert 行只写 id / name —— 与 dsh-speak-up / dsh-auto-continue 的写法保持一致。
+- insert:
+    - id: dsh-fish-tools
+      name: 'dsh-fish-tools'
