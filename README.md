@@ -107,3 +107,30 @@
 
 补丁改的是第三方包里**已经被加载进内存**的代码，所以应用 / 还原之后必须重启 DSH 才生效。
 设置页会提示这一点。
+
+---
+
+## 七、测试
+
+```bash
+node tests/run.mjs     # 或 npm test
+```
+
+六组，全部在本机跑（不需要网络、不需要起 DSH）：
+
+| 套件 | 盯什么 |
+|---|---|
+| 清单 | `package.json` 的 `main` / `exports` / `dsh.bundle.patch`、挂载行 id 与包名一致 |
+| schema | 两个工具的 JSON Schema 合法（`{type:'json'}` 这种会被 ajv 拒） |
+| 补丁 | 五条补丁的状态、幂等、带/不带 hash 的还原、往返逐字节一致 |
+| 素材收口 | 跑 `turns.js` 里那段**真实**补丁代码，验写盘、形状、去重、忽略未登记工具 |
+| 工具 | `bili_report` / `heartbeat_seeds` / `/state` 路由（临时 `DSH_HOME`） |
+| 设置页 | `__ModuleLoader__` + 假 slots 注册出「大肥鱼对接」，组件可构造 |
+
+几个约定：
+
+- **真实 profile 只读**：补丁相关的写入都在三个包的临时副本上做，跑完即删。
+- **真实配置不改**：测试里设 `FISH_TOOLS_NO_PROJECT=1`，插件启动时跳过投影。
+- `DSH_PROFILE_DIR` 可覆盖被测 profile（默认 `D:/ai-configs/runtime/dsh/profiles/desktop`）；
+  该 profile 缺某个包或没有 react 时，对应套件会**跳过而不是乱报失败**。
+- 任何失败都会以退出码 1 结束；一个套件崩了不影响其余套件继续跑。
